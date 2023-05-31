@@ -23,8 +23,8 @@ public class OnlinePage {
     @FindBy(xpath = "//*[contains(@class,'sc-6t7480-0 bPqIRK')]")
     WebElement element;
 
-    @FindBy(xpath = "//a[.//span[contains(text(), 'Smrznuti proizvodi')]]")
-    WebElement linkSmrznutiProizvodi;
+    @FindBy(xpath = "//a[contains(text(),'Preskoči link')]")
+    WebElement linkHome;
 
     WebDriver driver;
 
@@ -46,8 +46,15 @@ public class OnlinePage {
     public void clickOdjava(){
         linkOdjava.click();
     }
-    public void clickSmrznutiProizvodi(){
-        linkSmrznutiProizvodi.click();
+    public void clickProductGroup(String productGroup){
+        driver.findElement(By.xpath("//a[.//span[contains(text(), '" + productGroup + "')]]")).click();
+    }
+    public void clickProduct(String product){
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.numberOfElementsToBe(By.xpath("//a[.//span[contains(text(), '" + product + "')]]"), 2));
+        driver.findElements(By.xpath("//a[.//span[contains(text(), '" + product + "')]]")).get(1).click();
+    }
+    public void clickHome(){
+        linkHome.click();
     }
 
 }

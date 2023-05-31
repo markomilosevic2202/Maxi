@@ -116,6 +116,7 @@ public class StepDef {
 
         regPage.enterEmail(email);
 
+
     }
     @Given("enter your password {string}")
     public void enter_your_password(String pass) {
@@ -147,10 +148,19 @@ public class StepDef {
     public void click_on_the_page_reg_button_prihvatam() {
         regPage.clickPrihvatam();
     }
-    @When("click on the page online link Smrznuti Proizvodi")
-    public void click_on_the_page_online_link_smrznuti_proizvodi() {
-        onlinePage.clickSmrznutiProizvodi();
+    @When("click on the page online link product group {string}")
+    public void click_on_the_page_online_link_product_group(String productGroup) {
+        onlinePage.clickProductGroup(productGroup);
     }
+    @When("click on the page online link product {string}")
+    public void click_on_the_page_online_link_product(String product) {
+       onlinePage.clickProduct(product);
+    }
+    @When("click on the page online link maxi")
+    public void click_on_the_page_online_link_maxi() {
+         onlinePage.clickHome();
+    }
+
 
 
 

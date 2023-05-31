@@ -41,7 +41,7 @@ public class RegPage {
     public void clickPrihvatam(){
         btnPrihvatam.click();
     }
-    public void enterEmail(String email){
+    public void enterEmail(String email) throws InterruptedException {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(inpEmail));
         inpEmail.sendKeys(email);
     }
