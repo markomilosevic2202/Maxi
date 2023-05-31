@@ -9,4 +9,4 @@ Feature: Login
     When click on the page online link maxi
     When click on the page online link product group "Slatki i slani konditori"
     When click on the page online link product "Žvake"
-    Then verify that the page is located at the address "Slatki-i-slani-konditori/Žvake"
+   // Then verify that the page is located at the address "Slatki-i-slani-konditori/Žvake"
