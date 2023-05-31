@@ -1,7 +1,6 @@
 package org.example.definitions;
 
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import data.DataSet;
@@ -17,11 +16,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.page_factory.*;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
@@ -39,8 +40,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 
-
-
 public class StepDef {
 
 
@@ -49,6 +48,11 @@ public class StepDef {
     private Actions actions;
     DataSet dataSetTest;
 
+    RegPage regPage;
+
+    OnlinePage onlinePage;
+    WebDriverWait wait;
+
 
     @Before
 
@@ -56,7 +60,7 @@ public class StepDef {
         dataSetTest = new DataSet();
 
         System.setProperty(dataSetTest.getData1(), dataSetTest.getData2()
-               );
+        );
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments(dataSetTest.getData3());
         chromeOptions.addArguments(dataSetTest.getData4()); // open Browser in maximized mode
@@ -70,8 +74,12 @@ public class StepDef {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
         actions = new Actions(driver);
+        regPage = new RegPage(driver);
+        onlinePage = new OnlinePage(driver);
+        wait = new WebDriverWait(driver, 10);
 
-        //pedja caraaaaasssssss
+
+
     }
 
     @After(order = 1)
@@ -94,16 +102,79 @@ public class StepDef {
     }
 
 
-
     @Given("go to the address {string}")
-    public void go_to_the_address(String string) {
+    public void go_to_the_address(String url) throws InterruptedException {
+        driver.get(url);
+        Thread.sleep(1000);
+
+
 
     }
-    @When("click on the page mozzart button {string}")
-    public void click_on_the_page_mozzart_button(String string) {
+
+    @Given("enter your login email {string}")
+    public void enter_your_login_email(String email) throws InterruptedException {
+
+        regPage.enterEmail(email);
 
     }
+    @Given("enter your password {string}")
+    public void enter_your_password(String pass) {
 
+        regPage.enterPass(pass);
+    }
+
+
+
+
+
+
+
+    @When("click on the page reg button Submit")
+    public void click_on_the_page_reg_button_submit() {
+        regPage.clickSubmit();
+    }
+
+    @When("click on the page online link Dobro dosli")
+    public void click_on_the_page_online_link_dobro_dosli() {
+          onlinePage.clickDobroDosli();
+    }
+
+    @When("click on the page online link Odjava")
+    public void click_on_the_page_online_link_odjava() {
+       onlinePage.clickOdjava();
+    }
+    @When("click on the page reg button Prihvatam")
+    public void click_on_the_page_reg_button_prihvatam() {
+        regPage.clickPrihvatam();
+    }
+    @When("click on the page online link Smrznuti Proizvodi")
+    public void click_on_the_page_online_link_smrznuti_proizvodi() {
+        onlinePage.clickSmrznutiProizvodi();
+    }
+
+
+
+
+
+
+
+
+    @Then("verify that there is an element with text {string}")
+    public void verify_that_there_is_an_element_with_text(String text) {
+        onlinePage.verifyElementExist(text);
+    }
+
+    @Then("verify that there is no element with text {string}")
+    public void verify_that_there_is_no_element_with_text(String text) throws InterruptedException {
+        Thread.sleep(3000);
+        onlinePage.verifyElementNotExist(text);
+    }
+    @Then("verify that the page is located at the address {string}")
+    public void verify_that_the_page_is_located_at_the_address(String address) {
+        wait.until(ExpectedConditions.urlContains(address));
+        Assertions.assertTrue(driver.getCurrentUrl().contains(address), "The page is not at the address '"
+                + address + "'. Address is '" + driver.getCurrentUrl() + "'");
+    }
 
 
 
