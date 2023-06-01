@@ -157,8 +157,13 @@ public class StepDef {
        onlinePage.clickProduct(product);
     }
     @When("click on the page online link maxi")
-    public void click_on_the_page_online_link_maxi() {
+    public void click_on_the_page_online_link_maxi() throws InterruptedException {
+      //  Thread.sleep(2000);
          onlinePage.clickHome();
+    }
+    @When("add a product that is {string} in a row of {string} pieces")
+    public void add_a_product_that_is_in_a_row_of_pieces(String ordinalNumber, String numberOfPieces) throws InterruptedException {
+       onlinePage.addProduct(Integer.parseInt(ordinalNumber), Integer.parseInt(numberOfPieces) );
     }
 
 
