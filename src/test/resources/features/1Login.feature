@@ -11,8 +11,8 @@
 #    When click on the page online link Dobro dosli
 #    When click on the page online link Odjava
 #    Then verify that there is no element with text "Dobro došli"
-
-
+#
+#
 #  Scenario: Logging in with the correct parameters
 #    Given go to the address "https://www.maxi.rs/reg/welcome?lastViewedPage=%2Fonline"
 #    When click on the page reg button Prihvatam

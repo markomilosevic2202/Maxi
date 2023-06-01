@@ -11,6 +11,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.List;
 
@@ -28,8 +30,17 @@ public class OnlinePage {
     @FindBy(xpath = "//*[contains(@class,'sc-17vg88v-0 kuvTkU')]")
     WebElement linkHome;
 
+    @FindBy(xpath = "//*[contains(@class,'iaPCqF')]")
+    WebElement scheduleDelivery;
+
+    @FindBy(xpath = "//button[contains(@class,'sc-dyjemn-9 huSpzL')]")
+    WebElement btnChooseLater;
+
     @FindBy(xpath = "//*[contains(@class,'sc-y4jrw3-0 gTTPXD')]")
     List<WebElement> listProduct;
+
+    @FindBy(className = "fTJKCW")
+    WebElement elementBasket;
 
 
     WebDriver driver;
@@ -71,24 +82,43 @@ public class OnlinePage {
         linkHome.click();
     }
 
-    public void addProduct(int ordinalNumber, int numberOfPieces) throws InterruptedException {
+    public Product addProduct(int ordinalNumber, int numberOfPieces) throws InterruptedException {
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        Product product = new Product();
 
-
-
-            WebElement webElement = listProduct.get(ordinalNumber);
-          Double price = Double.parseDouble(webElement.findElement(By.className("cvodff")).findElement(By.className("iylpbx")).getText());
-            webElement.findElement(By.className("dyQUVu")).click();
-
+        WebElement webElement = listProduct.get(ordinalNumber);
+        String priceString = webElement.findElement(By.className("cvodff")).findElement(By.className("iylpbx")).getText();
+        priceString = priceString.replace(",", ".");
+        Double price = Double.parseDouble(priceString.substring(0,priceString.indexOf(" ")));
+        webElement.findElement(By.className("dyQUVu")).click();
 
         for (int i = 1; i < numberOfPieces; i++) {
             webElement.findElements(By.className("cAKAfV")).get(1).click();
         }
-
-
-
-
-
-        }
-
+        product.setNumberOfPieces(numberOfPieces);
+        product.setPrice(Double.valueOf(df.format(price)));
+        product.setTotalPrice(Double.valueOf(df.format(numberOfPieces * price)));
+        product.setName(webElement.findElement(By.className("hgxuXW")).getText());
+        product.setWeight(webElement.findElement(By.className("laiUsZ")).getText());
+        return product;
 
     }
+    public void waitWindowScheduleDelivery(){
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(scheduleDelivery));
+
+    }
+    public void clickChooseLater(){
+        btnChooseLater.click();
+
+    }
+    public void verifyNumberItemsOnBasket(int numberItem){
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.textToBe(By.className("fTJKCW"), Integer.toString(numberItem)));
+       Assertions.assertTrue(numberItem == Integer.parseInt(elementBasket.getText()), "The number of elements in the basket is incorrect ");
+
+    }
+    public void clickOnBasket(){
+        elementBasket.click();
+
+    }
+}

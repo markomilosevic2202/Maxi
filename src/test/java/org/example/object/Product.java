@@ -13,9 +13,10 @@ public class Product {
 
 
     private String name;
-    private Double weight;
+    private String weight;
     private Double price;
-    private int number;
+    private Double totalPrice;
+    private int numberOfPieces;
 
 
 }

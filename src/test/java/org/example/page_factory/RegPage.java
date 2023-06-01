@@ -27,8 +27,6 @@ public class RegPage {
 
 
 
-
-
     WebDriver driver;
 
     public RegPage(WebDriver driver) {
@@ -41,12 +39,12 @@ public class RegPage {
     public void clickPrihvatam(){
         btnPrihvatam.click();
     }
-    public void enterEmail(String email) throws InterruptedException {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(inpEmail));
+    public void enterEmail(String email) {
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(inpEmail));
         inpEmail.sendKeys(email);
     }
     public void enterPass(String pass){
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(inpEmail));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(inpEmail));
         inpPass.sendKeys(pass);
     }
 
