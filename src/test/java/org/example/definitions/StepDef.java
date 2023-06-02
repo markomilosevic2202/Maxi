@@ -1,8 +1,6 @@
 package org.example.definitions;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import data.DataSet;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -10,11 +8,6 @@ import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.object.Product;
 import org.example.page_factory.*;
 import org.junit.jupiter.api.Assertions;
@@ -27,18 +20,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.util.*;
 import java.io.*;
-import java.text.DecimalFormat;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class StepDef {
@@ -229,8 +213,22 @@ public class StepDef {
     }
     @Then("check whether all parameters for each item are displayed correctly")
     public void check_whether_all_parameters_for_each_item_are_displayed_correctly() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+         List<Product> listCheckbox = checkoutPage.addAllElementsInList();
+        verifyProducts(listProduct, listCheckbox);
+
+    }
+
+    public static void verifyProducts(List<Product> expectedList, List<Product> actualList) {
+        for (Product expectedProduct : expectedList) {
+            boolean found = false;
+            for (Product actualProduct : actualList) {
+                if (expectedProduct.equals(actualProduct)) {
+                    found = true;
+                    break;
+                }
+            }
+            assert found : "Expected product not found: " + expectedProduct.toString();
+        }
     }
 
 
