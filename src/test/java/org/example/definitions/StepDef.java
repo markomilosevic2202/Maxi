@@ -90,14 +90,14 @@ public class StepDef {
 
     @After(order = 0)
     public void afterClass() throws InterruptedException {
-        System.out.println(bill);
+
         // Thread.sleep(33000);
         driver.quit();
     }
 
 
     @Given("go to the address {string}")
-    public void go_to_the_address(String url) throws InterruptedException {
+    public void go_to_the_address(String url) {
         driver.get(url);
 
 
