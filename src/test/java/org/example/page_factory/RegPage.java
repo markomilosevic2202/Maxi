@@ -54,6 +54,11 @@ public class RegPage {
         List <WebElement> list =  driver.findElements(By.xpath("//p[contains(text(), '" + text + "')]"));
         Assertions.assertTrue(list.size() < 1, "");
     }
+    public void windowsMessageExist(String text){
+
+        List <WebElement> list =  driver.findElements(By.xpath("//span[contains(text(), '" + text + "')]"));
+        Assertions.assertTrue(list.size() < 1, "");
+    }
 
 
 }

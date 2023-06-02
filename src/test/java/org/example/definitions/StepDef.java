@@ -217,14 +217,12 @@ public class StepDef {
     }
 
     @Then("verify that there is a message {string}")
-    public void verify_that_there_is_a_message(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void verify_that_there_is_a_message(String text) {
+        regPage.messageExist(text);
     }
     @Then("verify that there is a span element with a message {string}")
-    public void verify_that_there_is_a_span_element_with_a_message(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void verify_that_there_is_a_span_element_with_a_message(String text) {
+        regPage.;
     }
 
 
