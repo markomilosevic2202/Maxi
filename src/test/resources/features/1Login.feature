@@ -21,14 +21,14 @@ Feature: Login
 #    Then verify that the page is located at the address "/create-account"
 #    Then verify that there is an element with text "Kreiraj moj nalog"
 #
-Scenario: Login will not be corrected by pass
+#Scenario: Login will not be corrected by pass
 #    Given go to the address "https://www.maxi.rs/reg/welcome?lastViewedPage=%2Fonline"
 #    When click on the page reg button Prihvatam
 #    Given enter your login email "marko.milosevic2203@gmail.com"
 #    When click on the page reg button Submit
 #    Given enter your password ""
 #    When click on the page reg button Submit
-    Then verify that there is a message window " "
-    Given enter your password "Marko01"
-    When click on the page reg button Submit
-    Then verify that there is a span element with a message ""
+#    Then verify that there is a message window "Molimo unesite Vašu sadašnju lozinku"
+#    Given enter your password "Marko01"
+#    When click on the page reg button Submit
+#    Then verify that there is a message window "Korisničko ime ili lozinka nisu tačni."

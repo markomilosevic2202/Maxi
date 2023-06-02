@@ -220,9 +220,10 @@ public class StepDef {
     public void verify_that_there_is_a_message(String text) {
         regPage.messageExist(text);
     }
-    @Then("verify that there is a span element with a message {string}")
-    public void verify_that_there_is_a_span_element_with_a_message(String text) {
-        regPage.;
+
+    @Then("verify that there is a message window {string}")
+    public void verify_that_there_is_a_message_window(String text) {
+        regPage.windowsMessageExist(text);
     }
 
 
