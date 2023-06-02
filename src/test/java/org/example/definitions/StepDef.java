@@ -1,8 +1,6 @@
 package org.example.definitions;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import data.DataSet;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -10,11 +8,7 @@ import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.example.object.Product;
 import org.example.page_factory.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
@@ -26,18 +20,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.util.*;
 import java.io.*;
-import java.text.DecimalFormat;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class StepDef {
@@ -50,8 +35,16 @@ public class StepDef {
 
     RegPage regPage;
 
+    CheckoutPage checkoutPage;
+
     OnlinePage onlinePage;
     WebDriverWait wait;
+
+    static double bill = 0;
+
+    static List<Product> listProduct;
+
+    static int totalNumberItem;
 
 
     @Before
@@ -75,9 +68,10 @@ public class StepDef {
         driver.manage().window().maximize();
         actions = new Actions(driver);
         regPage = new RegPage(driver);
+        checkoutPage = new CheckoutPage(driver);
         onlinePage = new OnlinePage(driver);
         wait = new WebDriverWait(driver, 10);
-
+        listProduct = new ArrayList<>();
 
 
     }
@@ -97,36 +91,31 @@ public class StepDef {
     @After(order = 0)
     public void afterClass() throws InterruptedException {
 
-        Thread.sleep(3000);
+        // Thread.sleep(33000);
         driver.quit();
     }
 
 
     @Given("go to the address {string}")
-    public void go_to_the_address(String url) throws InterruptedException {
+    public void go_to_the_address(String url) {
         driver.get(url);
-        Thread.sleep(1000);
-
 
 
     }
 
     @Given("enter your login email {string}")
-    public void enter_your_login_email(String email) throws InterruptedException {
+    public void enter_your_login_email(String email) {
 
         regPage.enterEmail(email);
 
+
     }
+
     @Given("enter your password {string}")
     public void enter_your_password(String pass) {
 
         regPage.enterPass(pass);
     }
-
-
-
-
-
 
 
     @When("click on the page reg button Submit")
@@ -136,27 +125,47 @@ public class StepDef {
 
     @When("click on the page online link Dobro dosli")
     public void click_on_the_page_online_link_dobro_dosli() {
-          onlinePage.clickDobroDosli();
+        onlinePage.clickDobroDosli();
     }
 
     @When("click on the page online link Odjava")
     public void click_on_the_page_online_link_odjava() {
-       onlinePage.clickOdjava();
+        onlinePage.clickOdjava();
     }
+
     @When("click on the page reg button Prihvatam")
     public void click_on_the_page_reg_button_prihvatam() {
         regPage.clickPrihvatam();
     }
-    @When("click on the page online link Smrznuti Proizvodi")
-    public void click_on_the_page_online_link_smrznuti_proizvodi() {
-        onlinePage.clickSmrznutiProizvodi();
+
+    @When("click on the page online link product group {string}")
+    public void click_on_the_page_online_link_product_group(String productGroup) {
+        onlinePage.clickProductGroup(productGroup);
     }
 
+    @When("click on the page online link product {string}")
+    public void click_on_the_page_online_link_product(String product) {
+        onlinePage.clickProduct(product);
+    }
 
+    @When("click on the page online link maxi")
+    public void click_on_the_page_online_link_maxi() {
 
+        onlinePage.clickHome();
+    }
 
+    @When("add a product that is {string} in a row of {string} pieces")
+    public void add_a_product_that_is_in_a_row_of_pieces(String ordinalNumber, String numberOfPieces) throws InterruptedException {
+        Product product = onlinePage.addProduct(Integer.parseInt(ordinalNumber), Integer.parseInt(numberOfPieces));
+        listProduct.add(product);
+        bill = bill + product.getTotalPrice();
+        totalNumberItem = totalNumberItem + Integer.parseInt(numberOfPieces);
+    }
 
-
+    @When("click on the page online on basket")
+    public void click_on_the_page_online_on_basket() {
+        onlinePage.clickOnBasket();
+    }
 
 
     @Then("verify that there is an element with text {string}")
@@ -169,6 +178,7 @@ public class StepDef {
         Thread.sleep(3000);
         onlinePage.verifyElementNotExist(text);
     }
+
     @Then("verify that the page is located at the address {string}")
     public void verify_that_the_page_is_located_at_the_address(String address) {
         wait.until(ExpectedConditions.urlContains(address));
@@ -176,6 +186,60 @@ public class StepDef {
                 + address + "'. Address is '" + driver.getCurrentUrl() + "'");
     }
 
+    @Then("wait for the window to select the delivery date to appear and click on the decision later")
+    public void wait_for_the_window_to_select_the_delivery_date_to_appear_and_click_on_the_decision_later() {
+
+        onlinePage.waitWindowScheduleDelivery();
+        onlinePage.clickChooseLater();
+    }
+
+    @Then("verify that the basket has the correct number of selected items")
+    public void verify_that_the_basket_has_the_correct_number_of_selected_items() throws InterruptedException {
+        Thread.sleep(2000);
+        onlinePage.verifyNumberItemsOnBasket(totalNumberItem);
+    }
+
+    @Then("verify that the item number on the checkout page is correct")
+    public void verify_that_the_item_number_on_the_checkout_page_is_correct() {
+        checkoutPage.verifyElementExist(listProduct.size());
+    }
+
+    @Then("verify that the total purchase amount is correct")
+    public void verify_that_the_total_purchase_amount_is_correct() {
+        checkoutPage.verifyTotalBill(bill);
+    }
+
+    @Then("check whether all parameters for each item are displayed correctly")
+    public void check_whether_all_parameters_for_each_item_are_displayed_correctly() {
+        List<Product> listCheckbox = checkoutPage.addAllElementsInList();
+        verifyProducts(listProduct, listCheckbox);
+
+    }
+
+    @Then("verify that there is a message {string}")
+    public void verify_that_there_is_a_message(String text) {
+        regPage.messageExist(text);
+    }
+
+    @Then("verify that there is a message window {string}")
+    public void verify_that_there_is_a_message_window(String text) {
+        regPage.windowsMessageExist(text);
+    }
+
+
+
+    public static void verifyProducts(List<Product> expectedList, List<Product> actualList) {
+        for (Product expectedProduct : expectedList) {
+            boolean found = false;
+            for (Product actualProduct : actualList) {
+                if (expectedProduct.equals(actualProduct)) {
+                    found = true;
+                    break;
+                }
+            }
+            assert found : "Expected product not found: " + expectedProduct.toString();
+        }
+    }
 
 
 }

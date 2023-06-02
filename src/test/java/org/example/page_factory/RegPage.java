@@ -1,5 +1,6 @@
 package org.example.page_factory;
 
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class RegPage {
 
@@ -27,8 +29,6 @@ public class RegPage {
 
 
 
-
-
     WebDriver driver;
 
     public RegPage(WebDriver driver) {
@@ -41,13 +41,23 @@ public class RegPage {
     public void clickPrihvatam(){
         btnPrihvatam.click();
     }
-    public void enterEmail(String email){
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(inpEmail));
+    public void enterEmail(String email) {
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(inpEmail));
         inpEmail.sendKeys(email);
     }
     public void enterPass(String pass){
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(inpEmail));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(inpEmail));
         inpPass.sendKeys(pass);
+    }
+    public void messageExist(String text){
+
+        List <WebElement> list =  driver.findElements(By.xpath("//p[contains(text(), '" + text + "')]"));
+        Assertions.assertTrue(list.size() < 1, "");
+    }
+    public void windowsMessageExist(String text){
+
+        List <WebElement> list =  driver.findElements(By.xpath("//span[contains(text(), '" + text + "')]"));
+        Assertions.assertTrue(list.size() < 1, "");
     }
 
 
