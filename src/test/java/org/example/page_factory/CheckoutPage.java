@@ -23,7 +23,7 @@ public class CheckoutPage {
     @FindBy(className = "caWbHO")
     List<WebElement> listItems;
 
-    @FindBy(className = "khUemx")
+    @FindBy(className = "leZJRR")
     WebElement priceAllItems;
 
 
@@ -40,12 +40,12 @@ public class CheckoutPage {
         Assertions.assertTrue(listItems.size() == numberItems);
     }
 
-    public void verify(Double bill) {
+    public void verifyTotalBill(Double bill)  {
 
-        String totalPriceString = priceAllItems.findElement(By.className("dSLFbb")).getText();
+        String totalPriceString = priceAllItems.getText();
         totalPriceString = totalPriceString.replace(",", ".");
         Double totalPriceDouble = Double.parseDouble(totalPriceString.substring(totalPriceString.indexOf(" "), totalPriceString.length()));
-        Assertions.assertTrue(totalPriceDouble == bill, "The total price is not correct");
+        Assertions.assertTrue(Double.compare(totalPriceDouble,bill) == 0, "The total price is not correct");
 
     }
 
@@ -68,7 +68,7 @@ public class CheckoutPage {
             product.setName(webElement.findElement(By.className("bVltfk")).getText());
             product.setWeight(webElement.findElement(By.className("laiUsZ")).getText());
             listProduct.add(product);
-            System.out.println(product.toString());
+
         }
         return listProduct;
 

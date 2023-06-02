@@ -91,7 +91,7 @@ public class StepDef {
     @After(order = 0)
     public void afterClass() throws InterruptedException {
         System.out.println(bill);
-         // Thread.sleep(33000);
+        // Thread.sleep(33000);
         driver.quit();
     }
 
@@ -99,7 +99,6 @@ public class StepDef {
     @Given("go to the address {string}")
     public void go_to_the_address(String url) throws InterruptedException {
         driver.get(url);
-
 
 
     }
@@ -169,11 +168,6 @@ public class StepDef {
     }
 
 
-
-
-
-
-
     @Then("verify that there is an element with text {string}")
     public void verify_that_there_is_an_element_with_text(String text) {
         onlinePage.verifyElementExist(text);
@@ -198,25 +192,42 @@ public class StepDef {
         onlinePage.waitWindowScheduleDelivery();
         onlinePage.clickChooseLater();
     }
+
     @Then("verify that the basket has the correct number of selected items")
     public void verify_that_the_basket_has_the_correct_number_of_selected_items() throws InterruptedException {
         Thread.sleep(2000);
-       onlinePage.verifyNumberItemsOnBasket(totalNumberItem);
+        onlinePage.verifyNumberItemsOnBasket(totalNumberItem);
     }
+
     @Then("verify that the item number on the checkout page is correct")
     public void verify_that_the_item_number_on_the_checkout_page_is_correct() {
         checkoutPage.verifyElementExist(listProduct.size());
     }
+
     @Then("verify that the total purchase amount is correct")
     public void verify_that_the_total_purchase_amount_is_correct() {
-        checkoutPage.verify(bill);
+        checkoutPage.verifyTotalBill(bill);
     }
+
     @Then("check whether all parameters for each item are displayed correctly")
     public void check_whether_all_parameters_for_each_item_are_displayed_correctly() {
-         List<Product> listCheckbox = checkoutPage.addAllElementsInList();
+        List<Product> listCheckbox = checkoutPage.addAllElementsInList();
         verifyProducts(listProduct, listCheckbox);
 
     }
+
+    @Then("verify that there is a message {string}")
+    public void verify_that_there_is_a_message(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("verify that there is a span element with a message {string}")
+    public void verify_that_there_is_a_span_element_with_a_message(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+
 
     public static void verifyProducts(List<Product> expectedList, List<Product> actualList) {
         for (Product expectedProduct : expectedList) {
@@ -230,7 +241,6 @@ public class StepDef {
             assert found : "Expected product not found: " + expectedProduct.toString();
         }
     }
-
 
 
 }

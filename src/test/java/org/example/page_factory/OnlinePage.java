@@ -88,8 +88,8 @@ public class OnlinePage {
         Product product = new Product();
 
         WebElement webElement = listProduct.get(ordinalNumber);
-        String priceString = webElement.findElement(By.className("cvodff")).findElement(By.className("iylpbx")).getText();
-        priceString = priceString.replace(",", ".");
+        String priceString = webElement.findElement(By.className("cvodff")).findElement(By.className("sc-1qeaiy2-2")).getText();
+        priceString = priceString.replace(",", ".");//jEVmkC
         Double price = Double.parseDouble(priceString.substring(0,priceString.indexOf(" ")));
         webElement.findElement(By.className("dyQUVu")).click();
 
