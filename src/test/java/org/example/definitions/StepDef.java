@@ -172,14 +172,16 @@ public class StepDef {
         onlinePage.clickLinkText(text);
         Thread.sleep(5000);
     }
+
     @When("add article number for {string} pieces")
     public void add_article_number_for_pieces(String numberItem) {
         int numberItemInt = Integer.parseInt(numberItem);
         checkoutPage.addProduct(numberItemInt);
         Product product = listProduct.get(0);
-        product.setNumberOfPieces(product.getNumberOfPieces() +numberItemInt);
+        product.setNumberOfPieces(product.getNumberOfPieces() + numberItemInt);
         product.setTotalPrice(product.getTotalPrice() + product.getPrice() * numberItemInt);
     }
+
     @When("remove article number for {string} pieces")
     public void remove_article_number_for_pieces(String numberItem) {
         int numberItemInt = Integer.parseInt(numberItem);
@@ -189,15 +191,10 @@ public class StepDef {
         product.setTotalPrice(product.getTotalPrice() - product.getPrice() * numberItemInt);
     }
 
-
-
-
-
-
-
-
-
-
+    @When("click on the page checkout button remove first items")
+    public void click_on_the_page_checkout_button_remove_first_items() {
+        checkoutPage.removeFirsProduct();
+    }
 
 
     @Then("verify that there is an element with text {string}")
@@ -207,7 +204,7 @@ public class StepDef {
 
     @Then("verify that there is no element with text {string}")
     public void verify_that_there_is_no_element_with_text(String text) throws InterruptedException {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         onlinePage.verifyElementNotExist(text);
     }
 
@@ -262,6 +259,7 @@ public class StepDef {
     public void verify_that_there_is_a_subtitle_with_the_text(String string) {
 
     }
+
     @Then("verify that all images have loaded")
     public void verify_that_all_images_have_loaded() {
         onlinePage.verifyAllImageShow();
@@ -269,17 +267,20 @@ public class StepDef {
 
     @Then("take the parameters of the product in the basket")
     public void take_the_parameters_of_the_product_in_the_basket() {
-        checkoutPage.addAllElementsInList();
+        listProduct = checkoutPage.addAllElementsInList();
     }
+
     @Then("refresh page")
     public void refresh_page() throws InterruptedException {
         Thread.sleep(2000);
         driver.navigate().refresh();
     }
+
     @Then("verify that the product number is correct")
     public void verify_that_the_product_number_is_correct() {
         checkoutPage.verifyNumber(listProduct.get(0).getNumberOfPieces());
     }
+
     @Then("verify that the total price of the product is correct")
     public void verify_that_the_total_price_of_the_product_is_correct() {
         checkoutPage.totalPriceItem(listProduct.get(0).getTotalPrice());
@@ -290,6 +291,26 @@ public class StepDef {
         checkoutPage.verifyTotalBill(listProduct.get(0).getTotalPrice());
     }
 
+    @Then("verify that the basket has the correct number of selected items after remove product")
+    public void verify_that_the_basket_has_the_correct_number_of_selected_items_after_remove_product() {
+        checkoutPage.verifyElementExist(listProduct.size() - 1);
+    }
+
+    @Then("verify that there are no items with the name of the removed product")
+    public void verify_that_there_are_no_items_with_the_name_of_the_removed_product() {
+        checkoutPage.verifyNameElementNotExist(listProduct.get(0).getName());
+    }
+
+    @Then("verify that the total purchase price is correct after remove product")
+    public void verify_that_the_total_purchase_price_is_correct_after_remove_product() {
+        double totalPrice = 0;
+        for (int i = 0; i < listProduct.size(); i++) {
+            totalPrice = totalPrice + listProduct.get(i).getTotalPrice();
+        }
+        totalPrice = totalPrice - listProduct.get(0).getTotalPrice();
+        checkoutPage.verifyTotalBill(totalPrice);
+
+    }
 
 
     public static void verifyProducts(List<Product> expectedList, List<Product> actualList) {

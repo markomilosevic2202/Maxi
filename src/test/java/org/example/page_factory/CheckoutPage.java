@@ -32,6 +32,9 @@ public class CheckoutPage {
     @FindBy(className = "bmBhCh")
     List <WebElement> inpNumberPieces;
 
+    @FindBy(className = "eXNxVJ")
+    List <WebElement> btnRemoveProduct;
+
     DecimalFormat df = new DecimalFormat("#.##");
 
     WebDriver driver;
@@ -105,6 +108,18 @@ public class CheckoutPage {
         price = Math.round(totalBilOnItems * 100.0) / 100.0;
         Assertions.assertTrue(Double.compare(price,Math.round(totalBilOnItems * 100.0) / 100.0) == 0, "The total price item is not correct");
 
+    }
+    public void removeFirsProduct(){
+        btnRemoveProduct.get(0).click();
+    }
+    public void verifyNameElementNotExist(String name){
+
+        List<Product> list = addAllElementsInList();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getName().equals(name)){
+                Assertions.fail("Name product exist in checkout");
+            }
+        }
     }
 
 
