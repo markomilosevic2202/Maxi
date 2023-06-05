@@ -121,4 +121,31 @@ public class OnlinePage {
         elementBasket.click();
 
     }
+    public void clickLinkText(String text){
+        driver.findElement(By.xpath("//li[.//*[contains(text(), 'Naši brendovi')]]")).click();
+
+    }
+
+    public void verifySubtitleExist(String text){
+
+        List <WebElement> list =  driver.findElements(By.xpath("//h6[contains(text(), '" + text + "')]"));
+        Assertions.assertTrue(list.size() < 1, "");
+    }
+
+    public void verifyAllImageShow(){
+
+        List<WebElement> images = driver.findElements(By.tagName("img"));
+        System.out.println(images.size());
+        boolean allImagesLoaded = true;
+        for (WebElement image : images) {
+            boolean isImageLoaded = (boolean) ((JavascriptExecutor) driver).executeScript(
+                    "return arguments[0].complete && typeof arguments[0].naturalWidth != 'undefined' && arguments[0].naturalWidth > 0",
+                    image);
+            if (!isImageLoaded) {
+                allImagesLoaded = false;
+                break;
+            }
+        }
+       Assertions.assertTrue(allImagesLoaded, "Not all images are displayed");
+    }
 }

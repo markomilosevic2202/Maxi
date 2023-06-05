@@ -150,7 +150,6 @@ public class StepDef {
 
     @When("click on the page online link maxi")
     public void click_on_the_page_online_link_maxi() {
-
         onlinePage.clickHome();
     }
 
@@ -167,6 +166,39 @@ public class StepDef {
         onlinePage.clickOnBasket();
     }
 
+    @When("click on the page online link {string}")
+    public void click_on_the_page_online_link(String text) throws InterruptedException {
+        Thread.sleep(5000);
+        onlinePage.clickLinkText(text);
+        Thread.sleep(5000);
+    }
+    @When("add article number for {string} pieces")
+    public void add_article_number_for_pieces(String numberItem) {
+        int numberItemInt = Integer.parseInt(numberItem);
+        checkoutPage.addProduct(numberItemInt);
+        Product product = listProduct.get(0);
+        product.setNumberOfPieces(product.getNumberOfPieces() +numberItemInt);
+        product.setTotalPrice(product.getTotalPrice() + product.getPrice() * numberItemInt);
+    }
+    @When("remove article number for {string} pieces")
+    public void remove_article_number_for_pieces(String numberItem) {
+        int numberItemInt = Integer.parseInt(numberItem);
+        checkoutPage.removeProduct(numberItemInt);
+        Product product = listProduct.get(0);
+        product.setNumberOfPieces(product.getNumberOfPieces() - numberItemInt);
+        product.setTotalPrice(product.getTotalPrice() - product.getPrice() * numberItemInt);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     @Then("verify that there is an element with text {string}")
     public void verify_that_there_is_an_element_with_text(String text) {
@@ -181,7 +213,7 @@ public class StepDef {
 
     @Then("verify that the page is located at the address {string}")
     public void verify_that_the_page_is_located_at_the_address(String address) {
-        wait.until(ExpectedConditions.urlContains(address));
+        wait.until(ExpectedConditions.urlContains("/" + address));
         Assertions.assertTrue(driver.getCurrentUrl().contains(address), "The page is not at the address '"
                 + address + "'. Address is '" + driver.getCurrentUrl() + "'");
     }
@@ -224,6 +256,38 @@ public class StepDef {
     @Then("verify that there is a message window {string}")
     public void verify_that_there_is_a_message_window(String text) {
         regPage.windowsMessageExist(text);
+    }
+
+    @Then("verify that there is a subtitle with the text {string}")
+    public void verify_that_there_is_a_subtitle_with_the_text(String string) {
+
+    }
+    @Then("verify that all images have loaded")
+    public void verify_that_all_images_have_loaded() {
+        onlinePage.verifyAllImageShow();
+    }
+
+    @Then("take the parameters of the product in the basket")
+    public void take_the_parameters_of_the_product_in_the_basket() {
+        checkoutPage.addAllElementsInList();
+    }
+    @Then("refresh page")
+    public void refresh_page() throws InterruptedException {
+        Thread.sleep(2000);
+        driver.navigate().refresh();
+    }
+    @Then("verify that the product number is correct")
+    public void verify_that_the_product_number_is_correct() {
+        checkoutPage.verifyNumber(listProduct.get(0).getNumberOfPieces());
+    }
+    @Then("verify that the total price of the product is correct")
+    public void verify_that_the_total_price_of_the_product_is_correct() {
+        checkoutPage.totalPriceItem(listProduct.get(0).getTotalPrice());
+    }
+
+    @Then("verify that the total purchase price is correct")
+    public void verify_that_the_total_purchase_price_is_correct() {
+        checkoutPage.verifyTotalBill(listProduct.get(0).getTotalPrice());
     }
 
 

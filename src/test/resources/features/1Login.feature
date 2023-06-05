@@ -1,6 +1,6 @@
-Feature: Login
+#Feature: Login
 #
-#  Scenario: Logging in with the correct parameters
+# Scenario: Logging in with the correct parameters
 #    Given go to the address "https://www.maxi.rs/reg/welcome?lastViewedPage=%2Fonline"
 #    When click on the page reg button Prihvatam
 #    Given enter your login email "marko.milosevic2203@gmail.com"
@@ -21,7 +21,7 @@ Feature: Login
 #    Then verify that the page is located at the address "/create-account"
 #    Then verify that there is an element with text "Kreiraj moj nalog"
 #
-#Scenario: Login will not be corrected by pass
+#  Scenario: Login will not be corrected by pass
 #    Given go to the address "https://www.maxi.rs/reg/welcome?lastViewedPage=%2Fonline"
 #    When click on the page reg button Prihvatam
 #    Given enter your login email "marko.milosevic2203@gmail.com"

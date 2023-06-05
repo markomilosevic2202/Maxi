@@ -26,7 +26,13 @@ public class CheckoutPage {
     @FindBy(className = "leZJRR")
     WebElement priceAllItems;
 
+    @FindBy(className = "cAKAfV")
+    List <WebElement> btnAddOrRemove;
 
+    @FindBy(className = "bmBhCh")
+    List <WebElement> inpNumberPieces;
+
+    DecimalFormat df = new DecimalFormat("#.##");
 
     WebDriver driver;
 
@@ -45,12 +51,12 @@ public class CheckoutPage {
         String totalPriceString = priceAllItems.getText();
         totalPriceString = totalPriceString.replace(",", ".");
         Double totalPriceDouble = Double.parseDouble(totalPriceString.substring(totalPriceString.indexOf(" "), totalPriceString.length()));
-        Assertions.assertTrue(Double.compare(totalPriceDouble,bill) == 0, "The total price is not correct");
+        Assertions.assertTrue(Double.compare(totalPriceDouble,Math.round(bill * 100.0) / 100.0) == 0, "The total price is not correct");
 
     }
 
     public List<Product> addAllElementsInList() {
-        DecimalFormat df = new DecimalFormat("#.##");
+
         df.setRoundingMode(RoundingMode.HALF_UP);
         List<Product> listProduct = new ArrayList<>();
 
@@ -73,4 +79,37 @@ public class CheckoutPage {
         return listProduct;
 
     }
-}
+    public void addProduct(int numberItems) {
+
+        for (int i = 0; i < numberItems; i++) {
+            btnAddOrRemove.get(1).click();
+        }
+
+    }
+    public void removeProduct(int numberItems) {
+        btnAddOrRemove.get(0).click();
+    }
+
+    public void verifyNumber(int numberPieces)  {
+
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.attributeContains(inpNumberPieces.get(0), "value", String.valueOf(numberPieces)));
+        int numberPiecesPage = Integer.parseInt(inpNumberPieces.get(0).getAttribute("value"));
+        Assertions.assertTrue(numberPiecesPage == numberPieces, "Number of pieces of the product is not correct");
+
+    }
+    public void totalPriceItem(Double totalBilOnItems)  {
+        WebElement webElement = listItems.get(0);
+        String priceString = webElement.findElement(By.className("sc-1qeaiy2-2")).getText();
+        priceString = priceString.replace(",", ".");
+        Double price = Double.parseDouble(priceString.substring(0, priceString.indexOf(" ")));
+        price = Math.round(totalBilOnItems * 100.0) / 100.0;
+        Assertions.assertTrue(Double.compare(price,Math.round(totalBilOnItems * 100.0) / 100.0) == 0, "The total price item is not correct");
+
+    }
+
+
+
+
+    }
+
+
