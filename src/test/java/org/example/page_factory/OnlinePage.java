@@ -52,12 +52,12 @@ public class OnlinePage {
 
     public void verifyElementExist(String text) {
         List<WebElement> list = driver.findElements(By.xpath("//div[contains(text(),'" + text + "')]"));
-        Assertions.assertTrue(list.size() > 0, "There is no element with this text '" + text + "'");
+        Assertions.assertTrue(list.size() > 0, " :: There is no element with this text '" + text + "' :: ");
     }
 
     public void verifyElementNotExist(String text) {
         List<WebElement> list = driver.findElements(By.xpath("//div[contains(text(),'" + text + "')]"));
-        Assertions.assertTrue(list.size() == 0, "Element with this text '" + text + "' exist");
+        Assertions.assertTrue(list.size() == 0, " :: Element with this text '" + text + "' exist :: ");
     }
 
     public void clickDobroDosli() {
@@ -114,7 +114,7 @@ public class OnlinePage {
     }
     public void verifyNumberItemsOnBasket(int numberItem){
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.textToBe(By.className("fTJKCW"), Integer.toString(numberItem)));
-       Assertions.assertTrue(numberItem == Integer.parseInt(elementBasket.getText()), "The number of elements in the basket is incorrect ");
+       Assertions.assertTrue(numberItem == Integer.parseInt(elementBasket.getText()), " :: The number of elements in the basket is incorrect :: ");
 
     }
     public void clickOnBasket(){
@@ -129,7 +129,7 @@ public class OnlinePage {
     public void verifySubtitleExist(String text){
 
         List <WebElement> list =  driver.findElements(By.xpath("//h6[contains(text(), '" + text + "')]"));
-        Assertions.assertTrue(list.size() < 1, "");
+        Assertions.assertTrue(list.size() < 1, " :: Subtitle not exist :: ");
     }
 
     public void verifyAllImageShow(){
@@ -146,6 +146,6 @@ public class OnlinePage {
                 break;
             }
         }
-       Assertions.assertTrue(allImagesLoaded, "Not all images are displayed");
+       Assertions.assertTrue(allImagesLoaded, " :: Not all images are displayed :: ");
     }
 }

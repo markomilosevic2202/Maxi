@@ -45,6 +45,7 @@ public class StepDef {
     static List<Product> listProduct;
 
     static int totalNumberItem;
+    static String textNotification;
 
 
     @Before
@@ -115,6 +116,11 @@ public class StepDef {
     public void enter_your_password(String pass) {
 
         regPage.enterPass(pass);
+    }
+    @Given("enter notification {string}")
+    public void enter_notification(String text) {
+         checkoutPage.inputText(text);
+         textNotification = text;
     }
 
 
@@ -195,6 +201,20 @@ public class StepDef {
     public void click_on_the_page_checkout_button_remove_first_items() {
         checkoutPage.removeFirsProduct();
     }
+    @When("click on the button for notification of the first product")
+    public void click_on_the_button_for_notification_of_the_first_product() {
+        checkoutPage.clickNotificationFirstElement();
+    }
+
+    @When("click on the button save")
+    public void click_on_the_button_save() {
+        checkoutPage.clickSaveNotification();
+    }
+
+
+
+
+
 
 
     @Then("verify that there is an element with text {string}")
@@ -310,6 +330,19 @@ public class StepDef {
         totalPrice = totalPrice - listProduct.get(0).getTotalPrice();
         checkoutPage.verifyTotalBill(totalPrice);
 
+    }
+    @Then("verify that the number of notifications is visible")
+    public void verify_that_the_number_of_notifications_is_visible() {
+       checkoutPage.verifyNumberNotificationIsVisible();
+    }
+
+    @Then("verify that the number of notifications is not visible")
+    public void verify_that_the_number_of_notifications_is_not_visible() {
+        checkoutPage.verifyNumberNotificationIsNotVisible();
+    }
+    @Then("verify that the text of the notification is correct")
+    public void verify_that_the_text_of_the_notification_is_correct() {
+       checkoutPage.verifyTextNotificationCorrect(textNotification);
     }
 
 
